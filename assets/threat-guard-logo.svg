@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1220"/>
+      <stop offset="55%" stop-color="#101a2e"/>
+      <stop offset="100%" stop-color="#0a1424"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38f5c4"/>
+      <stop offset="100%" stop-color="#12b4f5"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38f5c4" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#12b4f5" stop-opacity="0.15"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="14" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- background -->
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+
+  <!-- faint radar rings -->
+  <g stroke="url(#ring)" fill="none" stroke-width="3" opacity="0.35">
+    <circle cx="512" cy="512" r="470"/>
+    <circle cx="512" cy="512" r="380"/>
+    <circle cx="512" cy="512" r="290"/>
+  </g>
+  <!-- radar crosshair ticks -->
+  <g stroke="#38f5c4" stroke-width="4" opacity="0.25" stroke-linecap="round">
+    <line x1="512" y1="42" x2="512" y2="82"/>
+    <line x1="512" y1="942" x2="512" y2="982"/>
+    <line x1="42" y1="512" x2="82" y2="512"/>
+    <line x1="942" y1="512" x2="982" y2="512"/>
+  </g>
+
+  <!-- shield body -->
+  <g filter="url(#glow)">
+    <path d="M512 176
+             L772 268
+             V512
+             C772 660 660 764 512 848
+             C364 764 252 660 252 512
+             V268 Z"
+          fill="#0e1a2c" stroke="url(#shield)" stroke-width="12"/>
+  </g>
+
+  <!-- inner shield line -->
+  <path d="M512 232
+           L716 306
+           V510
+           C716 626 626 710 512 780
+           C398 710 308 626 308 510
+           V306 Z"
+        fill="none" stroke="#38f5c4" stroke-width="5" opacity="0.45"/>
+
+  <!-- lock body -->
+  <rect x="396" y="470" width="232" height="196" rx="30" fill="url(#shield)"/>
+  <!-- lock shackle -->
+  <path d="M448 470 V414
+           a64 64 0 0 1 128 0 V470"
+        fill="none" stroke="#38f5c4" stroke-width="34" stroke-linecap="round"/>
+  <!-- keyhole -->
+  <circle cx="512" cy="548" r="26" fill="#0b1220"/>
+  <rect x="500" y="556" width="24" height="72" rx="12" fill="#0b1220"/>
+
+  <!-- scan sweep -->
+  <g opacity="0.5">
+    <path d="M512 512 L512 176 A336 336 0 0 1 760 306 Z" fill="#38f5c4" opacity="0.08"/>
+  </g>
+</svg>

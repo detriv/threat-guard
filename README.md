@@ -74,7 +74,18 @@ teneo agent publish threat-guard
 ```
 
 Metadata: `threat-guard-metadata.json` — 4 commands, 5 capabilities,
-categories Crypto + Security.
+`metadata_version` 2.4.0, categories Crypto + Other. Pricing uses the
+`task-transaction` / `per-query` shape that the Teneo validator accepts
+(the earlier `flat` / `query` values were rejected).
+
+Pricing:
+
+| Command | Args | Price |
+|:--|:--|:--|
+| `help` | — | free |
+| `wallet <chain> <address>` | chain + 0x addr | $0.005 |
+| `site <domain-or-url>` | domain/URL | $0.003 |
+| `flags <chain> <address>` | chain + 0x addr | $0.01 |
 
 ## Verify before trusting a result
 

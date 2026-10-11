@@ -1,13 +1,13 @@
 {
   "name": "Threat Guard",
   "agent_id": "threat-guard",
-  "short_description": "Wallet risk, phishing domain and risky approval screening for EVM addresses",
-  "description": "Security screening agent for the EVM ecosystem. Checks any wallet address for scam and sanctions exposure (cybercrime, money laundering, mixer use, malicious contracts created, phishing activity), verifies whether a domain is a known phishing site, and surfaces phishing risk indicators for a URL. Returns plain-text risk reports with the individual GoPlus security flags so you can judge severity yourself. Built for traders and deployers who want to vet a counterparty, a contract, or a link before interacting with it.",
+  "short_description": "EVM address, phishing domain and risk-flag screening for wallets, contracts and links",
+  "description": "Security screening agent for the EVM ecosystem. Checks any wallet or contract address for scam and sanctions exposure (cybercrime, money laundering, mixer use, malicious contracts created, phishing activity, fake KYC), verifies whether a domain or URL is a known phishing site, and returns a full raw-flag breakdown on demand. Every report states a HIGH / MEDIUM / LOW / CLEAN verdict and lists the individual GoPlus security flags that were raised, so you can judge severity yourself. Built for traders and deployers who want to vet a counterparty, a contract or a link before interacting with it. Data source: GoPlus Labs Security API, free tier, no API key required.",
   "agent_type": "command",
   "capabilities": [
     {
       "name": "address_risk_screening",
-      "description": "Screens an EVM wallet address for scam, sanctions, mixer and phishing exposure"
+      "description": "Screens an EVM wallet or contract address for scam, sanctions, mixer and phishing exposure"
     },
     {
       "name": "phishing_domain_detection",
@@ -29,73 +29,95 @@
   "commands": [
     {
       "trigger": "help",
+      "argument": "",
       "description": "Lists all available commands with arguments, examples and pricing.",
       "parameters": [],
-      "pricePerUnit": "0",
-      "priceType": "flat",
-      "taskUnit": "query"
+      "strictArg": true,
+      "minArgs": 0,
+      "maxArgs": 0,
+      "pricePerUnit": 0,
+      "priceType": "task-transaction",
+      "taskUnit": "per-query"
     },
     {
       "trigger": "wallet",
-      "description": "Screen an EVM wallet address for scam exposure: cybercrime, money laundering, mixer use, malicious contracts created, phishing activity, sanctions and fake KYC. Usage: wallet <chain> <address>",
+      "argument": "<chain> <address>",
+      "description": "Screens an EVM wallet or contract address for scam exposure: cybercrime, money laundering, mixer use, malicious contracts created, phishing activity, sanctions and fake KYC. Returns a plain-text risk report with a HIGH / MEDIUM / LOW / CLEAN verdict.",
       "parameters": [
         {
           "name": "chain",
-          "type": "string",
-          "description": "Chain name or id: ethereum, bsc, base, polygon, avalanche",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "options": ["ethereum", "bsc", "base", "polygon", "avalanche"],
+          "description": "Chain to screen the address on"
         },
         {
           "name": "address",
           "type": "string",
-          "description": "Wallet or contract address (0x...)",
-          "required": true
+          "required": true,
+          "minLength": "42",
+          "maxLength": "42",
+          "description": "Wallet or contract address (0x followed by 40 hex characters)"
         }
       ],
-      "pricePerUnit": "0.005",
-      "priceType": "flat",
-      "taskUnit": "query"
+      "strictArg": true,
+      "minArgs": 2,
+      "maxArgs": 2,
+      "pricePerUnit": 0.005,
+      "priceType": "task-transaction",
+      "taskUnit": "per-query"
     },
     {
       "trigger": "site",
-      "description": "Check whether a domain or URL is a known phishing site. Usage: site <domain-or-url>",
+      "argument": "<domain-or-url>",
+      "description": "Checks whether a domain or URL is a known phishing site and reports any related flagged contracts.",
       "parameters": [
         {
           "name": "url",
           "type": "string",
-          "description": "Domain or URL to check, e.g. uniswap.org or https://example.com",
-          "required": true
+          "required": true,
+          "minLength": "3",
+          "maxLength": "255",
+          "description": "Domain or URL to check, e.g. uniswap.org or https://example.com"
         }
       ],
-      "pricePerUnit": "0.003",
-      "priceType": "flat",
-      "taskUnit": "query"
+      "strictArg": true,
+      "minArgs": 1,
+      "maxArgs": 1,
+      "pricePerUnit": 0.003,
+      "priceType": "task-transaction",
+      "taskUnit": "per-query"
     },
     {
       "trigger": "flags",
-      "description": "Full risk-flag breakdown for an address as structured data: every GoPlus security flag with a value, not just the positives. Usage: flags <chain> <address>",
+      "argument": "<chain> <address>",
+      "description": "Returns the full risk-flag breakdown for an address as structured JSON: every GoPlus security flag with its raw value, not just the positives.",
       "parameters": [
         {
           "name": "chain",
-          "type": "string",
-          "description": "Chain name or id",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "options": ["ethereum", "bsc", "base", "polygon", "avalanche"],
+          "description": "Chain to fetch flags from"
         },
         {
           "name": "address",
           "type": "string",
-          "description": "Wallet or contract address (0x...)",
-          "required": true
+          "required": true,
+          "minLength": "42",
+          "maxLength": "42",
+          "description": "Wallet or contract address (0x followed by 40 hex characters)"
         }
       ],
-      "pricePerUnit": "0.01",
-      "priceType": "flat",
-      "taskUnit": "query"
+      "strictArg": true,
+      "minArgs": 2,
+      "maxArgs": 2,
+      "pricePerUnit": 0.01,
+      "priceType": "task-transaction",
+      "taskUnit": "per-query"
     }
   ],
-  "categories": ["Crypto", "Security"],
-  "data_sources": [
-    "GoPlus Labs Security API (free tier, no API key required)"
-  ],
-  "version": "1.0.0"
+  "nlp_fallback": false,
+  "categories": ["Crypto", "Other"],
+  "metadata_version": "2.4.0"
 }

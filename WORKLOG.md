@@ -89,6 +89,41 @@ Bugs found and fixed during verification:
 - `teneo agent deploy ./threat-guard` (mints NFT, gasless).
 - `teneo agent publish threat-guard` (public review, up to 72h).
 
+---
+
+## Metadata format correction (2026-10-11, second pass)
+
+The first version of `threat-guard-metadata.json` used
+`"priceType": "flat"` and `"taskUnit": "query"` with string prices. Those
+are **not** the values the Teneo validator accepts.
+
+Correct shape, taken from `indo-alpha-radar` which deployed successfully:
+
+```json
+"pricePerUnit": 0.005,
+"priceType": "task-transaction",
+"taskUnit": "per-query"
+```
+
+Changes applied:
+
+| Field | Was | Now |
+|:--|:--|:--|
+| `pricePerUnit` | `"0.005"` (string) | `0.005` (number) |
+| `priceType` | `flat` | `task-transaction` |
+| `taskUnit` | `query` | `per-query` |
+| `categories` | `["Crypto","Security"]` | `["Crypto","Other"]` — `Security` is not in the enum |
+| `metadata_version` | absent (`version` was) | `"2.4.0"` |
+
+Also added `argument`, `strictArg`, `minArgs`, `maxArgs` to every command
+and switched the chain parameter to `type: enum` with explicit `options`,
+matching the deployed agent. Verified: every top-level key now exists in
+the proven-deployed metadata, and the four triggers match the `switch`
+cases in `main.go`.
+
+Generic reusable template: `../agent-metadata-template.json` with field
+notes in `../agent-metadata-README.md`.
+
 ## Known blocker from the previous agent
 
 `signal-radar-pro` is stuck on a Teneo backend IPFS 403 during metadata
